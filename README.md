@@ -1,6 +1,6 @@
 # TriviaBlast
 
-**Juego de preguntas y respuestas en línea** Online trivia game designed for individual play.
+ Online trivia game designed for individual play.
 
 ## Proposal
 
