@@ -1,54 +1,72 @@
 # TriviaBlast
 
- Online trivia game designed for individual play.
+An online trivia web game: practise alone or challenge friends in **private multiplayer rooms** on a classic colour-category board. Questions come live from the [Open Trivia Database (OpenTDB)](https://opentdb.com/), across many categories and difficulty levels.
 
-## Proposal
+Team project for the *Web Engineering* course at **Complutense University of Madrid** (Erasmus+, 2026).
 
-### Description
+![Java](https://img.shields.io/badge/Java-24-orange) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-brightgreen) ![WebSockets](https://img.shields.io/badge/WebSockets-STOMP-blue) ![Karate](https://img.shields.io/badge/tests-Karate-yellow)
 
-TriviaBlast is an interactive game that allows users to practice and earn points in single-player matches, or compete on a classic color-category board in private multiplayer rooms. Questions are obtained from the [Open Trivia Database (OpenTDB)](https://opentdb.com/), offering a wide variety of categories and difficulty levels.
+## Features
 
-### Roles y permisos
+- **Accounts** – sign up, log in, edit profile (avatar, username, email, password confirmed with the old one) and delete the account.
+- **Single-player** – choose the number of questions, category and difficulty; correct answers earn points, wrong answers show the correct one.
+- **Anti-cheat by design** – answers are validated only on the server, so the browser never receives the correct answers (try `window.questions` in the console during a game).
+- **Multiplayer rooms** – private rooms joined with a code, real-time updates over WebSockets.
+- **Leaderboard** – players ranked by total points, visible to registered users.
+- **Admin panel** – list of users and full game history, hide or restore players on the leaderboard, open any profile to investigate suspicious results.
+- **Design** – UI designed in Figma and implemented with the Figma Dev Mode structure.
 
-| Role           | Permissions                                                                 |
-|---------------|--------------------------------------------------------------------------|
-| **Player**   | Manage account, play single-player matches, view leaderboard. |
-| **Administrator** | Hide, edit, delete, or restore user visibility, view users' game history to find if there is a cheating. |
+## Tech stack
 
-#### Single-player mode
+| Layer | Technologies |
+|---|---|
+| Backend | Java 24, Spring Boot 3.4, Spring MVC, Spring Security, Spring Data JPA (Hibernate) |
+| Real time | Spring WebSocket (STOMP) with Spring Security messaging |
+| Frontend | Thymeleaf, Bootstrap 5, JavaScript |
+| Database | H2 (file database `iwdb`), schema below |
+| External API | Open Trivia Database |
+| Tests | Karate (account, login, rooms, WebSocket and game flows), JUnit |
 
-- Custom configuration: Seelcting number of questions, category, difficulty.
-- Score based on difficulty and response speed.
+## Roles and permissions
 
-### Point system and leaderboard
+| Role | Permissions |
+|---|---|
+| **Player** | Manage own account, play single-player and multiplayer games, view the leaderboard |
+| **Administrator** | Hide, edit, delete or restore user visibility; view every user's game history to detect cheating |
 
-- Points are earned depending on the game mode and are reflected on the leaderboard (visible only to registered users).
-- Players are ranked from highest to lowest score.
-- Administrators can hide players from the leaderboard.
-
-### Game flow
+## Game flow
 
 1. Register or log in.
-2. Design your own game.
-3. Play the game
-4. Calculate points and update leaderboard.
+2. Set up your game (questions, category, difficulty) or join a room.
+3. Play: questions and answers are shown one by one, with the current question number and score.
+4. Points are calculated on the server and the leaderboard is updated.
 
-### Database Tables
+## Database
 
-- **IWUser**: Stores the player's id, avatar, email, password, total points, roles, usernames and visibility states.
-- **Game**: Stores each game's number of questions, id, playing user's id, difficulty, state and scores.
+![Database schema](DatabaseSchema.png)
 
-### Completed
+- **User** – username, password (hashed), email, avatar, roles, total points, leaderboard visibility.
+- **Game** – room code, number of questions, categories, difficulty, number of players, host, state.
+- **Player** – links a user to a game with the points earned in it.
+- **Message** – messages sent inside a game.
 
-- **Sign in or up**: Account registration and login are fully implemented. Error cases are handled correctly (for example, when two different passwords are entered while creating an account). After creating an account, the user is automatically logged in.
-- **Home page**: Correctly implemented.  Once logged in, users can start a single-player game. 
-- **Single-player game**: The first one, related to game creation and settings, is fully implemented. The question types correspond to those provided by the API being used. The actual single-player game is also completely implemented. Questions and possible answers are displayed. If the player answers incorrectly, the correct answer is shown afterward. It is worth mentioning that question validation is handled entirely in the backend, making cheating impossible (to verify that the frontend never receives the correct answers, start a single-player game, open the browser console, and type window.questions). There is also a button to quit the game, and the interface displays the current question number and accumulated points. Each correct answer gives the user 10 points.
-- **User profile**: Displays the user’s profile picture, username, and total points and game history. It also allows users to log out or completely delete their account. The edit button allows changing the profile picture, username, email, or password (which must be validated using the previous password). 
-- **Scoreboard**: Displays registered users along with their points. If an administrator decides to hide a user, the visibility status is updated in the database, and the user no longer appears in the table for normal users.
-- **Visual design**: Interface designed at the design application Figma. Used vibrant colours and implemented attractive design for the players to enjoy. While implementing, Figma's Developer Tool extension used to take the structure. 
-- **Admin page**: Admin can see the users and related informations at the user table. Below the table, you will find the gam history where all games are visible. If admin suspects of one user, can click to user's username and see their profile and their own game history to examine.
+## Run locally
 
-### Test users at DB
+Requirements: JDK 24 and Maven.
+
+```bash
+mvn spring-boot:run
+```
+
+Then open <http://localhost:8080>. The H2 console is at `/h2`.
+
+Run the tests:
+
+```bash
+mvn test
+```
+
+### Demo accounts (local database only)
 
 USERNAME : infinite.alex5
 PASSWORD : 1234
@@ -66,3 +84,7 @@ PASSWORD : 12
 	PASSWORD : aa
 (admin) USERNAME : b   
 	PASSWORD : bb
+
+## Team
+
+Developed by a student team at Complutense University of Madrid. Repository maintained by **Alexandra Rădulescu** – [GitHub](https://github.com/infinite-alex) · [LinkedIn](https://www.linkedin.com/in/alexandra-r%C4%83dulescu/).
