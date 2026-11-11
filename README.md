@@ -16,13 +16,7 @@ Team project for the *Web Engineering* course at **Complutense University of Mad
 
 You only need **Java 17 or newer** (`java -version`; otherwise get it from [adoptium.net](https://adoptium.net)).
 
-**Option 1 – ready-made jar:** download `TriviaBlast.jar` from the [Releases](../../releases) page, then run
-
-```bash
-java -jar TriviaBlast.jar
-```
-
-**Option 2 – from the source code:** download the repository (**Code → Download ZIP**), unzip it and run
+Download the repository (**Code → Download ZIP**), unzip it and run
 
 ```bash
 ./mvnw spring-boot:run        # Windows: mvnw.cmd spring-boot:run
