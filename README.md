@@ -1,17 +1,41 @@
 # TriviaBlast
 
-An online trivia web game: practise alone or challenge friends in **private multiplayer rooms** on a classic colour-category board. Questions come live from the [Open Trivia Database (OpenTDB)](https://opentdb.com/), across many categories and difficulty levels.
+An online trivia web game: create an account, set up a game (category, difficulty, number of questions) and climb the leaderboard. Questions come live from the [Open Trivia Database (OpenTDB)](https://opentdb.com/), across many categories and difficulty levels.
 
 Team project for the *Web Engineering* course at **Complutense University of Madrid** (Erasmus+, 2026).
 
-![Java](https://img.shields.io/badge/Java-24-orange) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-brightgreen) ![WebSockets](https://img.shields.io/badge/WebSockets-STOMP-blue) ![Karate](https://img.shields.io/badge/tests-Karate-yellow)
+![Java](https://img.shields.io/badge/Java-17%2B-orange) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-brightgreen) ![WebSockets](https://img.shields.io/badge/WebSockets-STOMP-blue) ![Karate](https://img.shields.io/badge/tests-Karate-yellow)
+
+| Login | Home |
+|---|---|
+| ![Login](docs/login.png) | ![Home](docs/home.png) |
+| **Game setup** | **Admin panel** |
+| ![Game setup](docs/setup.png) | ![Admin panel](docs/admin.png) |
+
+## Try it in 1 minute
+
+You only need **Java 17 or newer** (`java -version`; otherwise get it from [adoptium.net](https://adoptium.net)).
+
+**Option 1 – ready-made jar:** download `TriviaBlast.jar` from the [Releases](../../releases) page, then run
+
+```bash
+java -jar TriviaBlast.jar
+```
+
+**Option 2 – from the source code:** download the repository (**Code → Download ZIP**), unzip it and run
+
+```bash
+./mvnw spring-boot:run        # Windows: mvnw.cmd spring-boot:run
+```
+
+Open <http://localhost:8080> and log in with the demo account **b / bb** (player) or **a / aa** (admin), or create your own account. Questions are loaded from OpenTDB, so an internet connection is needed to play.
 
 ## Features
 
 - **Accounts** – sign up, log in, edit profile (avatar, username, email, password confirmed with the old one) and delete the account.
 - **Single-player** – choose the number of questions, category and difficulty; correct answers earn points, wrong answers show the correct one.
 - **Anti-cheat by design** – answers are validated only on the server, so the browser never receives the correct answers (try `window.questions` in the console during a game).
-- **Multiplayer rooms** – private rooms joined with a code, real-time updates over WebSockets.
+- **Multiplayer (in progress)** – game rooms with a join code and real-time messaging over WebSockets, covered by Karate tests; the multiplayer screens are not finished yet.
 - **Leaderboard** – players ranked by total points, visible to registered users.
 - **Admin panel** – list of users and full game history, hide or restore players on the leaderboard, open any profile to investigate suspicious results.
 - **Design** – UI designed in Figma and implemented with the Figma Dev Mode structure.
@@ -20,7 +44,7 @@ Team project for the *Web Engineering* course at **Complutense University of Mad
 
 | Layer | Technologies |
 |---|---|
-| Backend | Java 24, Spring Boot 3.4, Spring MVC, Spring Security, Spring Data JPA (Hibernate) |
+| Backend | Java 17+, Spring Boot 3.4, Spring MVC, Spring Security, Spring Data JPA (Hibernate) |
 | Real time | Spring WebSocket (STOMP) with Spring Security messaging |
 | Frontend | Thymeleaf, Bootstrap 5, JavaScript |
 | Database | H2 (file database `iwdb`), schema below |
@@ -50,40 +74,17 @@ Team project for the *Web Engineering* course at **Complutense University of Mad
 - **Player** – links a user to a game with the points earned in it.
 - **Message** – messages sent inside a game.
 
-## Run locally
-
-Requirements: JDK 24 and Maven.
+## Development
 
 ```bash
-mvn spring-boot:run
+./mvnw spring-boot:run     # run (H2 console at /h2)
+./mvnw test                # tests
+./mvnw package             # build target/TriviaBlast-0.0.1-SNAPSHOT.jar
 ```
 
-Then open <http://localhost:8080>. The H2 console is at `/h2`.
+### Demo accounts
 
-Run the tests:
-
-```bash
-mvn test
-```
-
-### Demo accounts (local database only)
-
-USERNAME : infinite.alex5
-PASSWORD : 1234
-
-USERNAME : ana
-PASSWORD : 234
-
-USERNAME : juan
-PASSWORD : 123
-
-USERNAME : maria1
-PASSWORD : 12
-
-(admin) USERNAME : a   
-	PASSWORD : aa
-(admin) USERNAME : b   
-	PASSWORD : bb
+Created automatically on first start: **a / aa** (admin) and **b / bb** (player).
 
 ## Team
 
